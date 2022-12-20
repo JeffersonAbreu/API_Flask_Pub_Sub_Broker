@@ -4,6 +4,7 @@ import threading
 import time
 import zmq
 from sub import Sub
+IP_HOST = "127.0.0.1"
 PAGAMENTOS: list = list()
 
 def getPrimeiroPagamentoFila():
@@ -27,7 +28,7 @@ def size() -> int:
 
 
 def atualizadorStatusPagamento():
-    IP_ADDRESS = "127.0.0.1"
+    IP_ADDRESS = IP_HOST
     _TOPIC = ""
     ctx = zmq.Context()
     sock: zmq.Socket = ctx.socket(zmq.PUB)
@@ -38,7 +39,7 @@ def atualizadorStatusPagamento():
             time.sleep(2)
             if (existe()):
                 print('\n')
-                logging.info(f"   >>>  fila de pagamento: {size()} pagamentos")
+                logging.info(f">>> fila de pagamento: {size()} pagamentos")
                 # primeiro da fila de processos
                 pgto = getPrimeiroPagamentoFila()
                 id = pgto['id']
@@ -54,7 +55,7 @@ def atualizadorStatusPagamento():
                 _TOPIC = f"TOPIC_{id}"
                 sock.send_string(f"{_TOPIC}", flags=zmq.SNDMORE)
                 sock.send_json(pgto)
-                logging.info(f"      {_TOPIC} => {pgto['status']} ( loop restantes {pgto['loop']})")
+                logging.info(f"{_TOPIC} | VENDA => ID:{pgto['id']} :: {pgto['status']} ( loop restantes {pgto['loop']})")
                 loop -= 1
 
                  # se status OK, não coloca na fila de pagamentos a ser processada
@@ -71,7 +72,7 @@ def atualizadorStatusPagamento():
 
 
 def observandoNewPagamento():
-    IP_ADDRESS = "127.0.0.1"
+    IP_ADDRESS = IP_HOST
     TOPIC = "pagamento"
     ctx = zmq.Context()
     sock: zmq.Socket = ctx.socket(zmq.SUB)

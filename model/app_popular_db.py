@@ -24,6 +24,18 @@ clientes = [
     {"nome": "Antonio", "endereco": "Rua dfggd"}
 ]
 
+for cliente in clientes:
+    requests.post(f"{url}/cliente", json=cliente)
+
+r = requests.get(f"{url}/cliente")
+pprint(r.json())
+
+for produto in produtos:
+    requests.post(f"{url}/produto", json=produto)
+
+r = requests.get(f"{url}/produto")
+pprint(r.json())
+
 vendas = [
     {
         "cliente_id": 1,
@@ -72,23 +84,90 @@ vendas = [
                 "preco": 9.99
             }
         ]
+    },
+    {
+        "cliente_id": 3,
+        "tipo_pag": 'pix',
+        "itens":
+        [
+            {
+                "produto_id": 4,
+                "qtd": 2,
+                "preco": 10.00
+            }, {
+                "produto_id": 2,
+                "qtd": 1,
+                "preco": 9.99
+            }
+        ]
+    },
+    {
+        "cliente_id": 4,
+        "tipo_pag": 'cartao',
+        "itens":
+        [
+            {
+                "produto_id": 1,
+                "qtd": 2,
+                "preco": 10.00
+            }, {
+                "produto_id": 5,
+                "qtd": 1,
+                "preco": 9.99
+            }
+        ]
+    },    {
+        "cliente_id": 1,
+        "tipo_pag": 'cartao',
+        "itens":
+        [
+            {
+                "produto_id": 1,
+                "qtd": 2,
+                "preco": 10.00
+            }, {
+                "produto_id": 2,
+                "qtd": 1,
+                "preco": 9.99
+            }
+        ]
+    },
+    {
+        "cliente_id": 2,
+        "tipo_pag": 'pix',
+        "itens":
+        [
+            {
+                "produto_id": 1,
+                "qtd": 2,
+                "preco": 10.00
+            }, {
+                "produto_id": 2,
+                "qtd": 1,
+                "preco": 9.99
+            }
+        ]
+    },
+    {
+        "cliente_id": 4,
+        "tipo_pag": 'boleto',
+        "itens":
+        [
+            {
+                "produto_id": 1,
+                "qtd": 2,
+                "preco": 10.00
+            }, {
+                "produto_id": 2,
+                "qtd": 1,
+                "preco": 9.99
+            }
+        ]
     }
 ]
 
-for cliente in clientes:
-    requests.post(f"{url}/cliente", json=cliente)
-
-r = requests.get(f"{url}/cliente")
-pprint(r.json())
-
-for produto in produtos:
-    requests.post(f"{url}/produto", json=produto)
-
-r = requests.get(f"{url}/produto")
-pprint(r.json())
 
 for venda in vendas:
     requests.post(f"{url}/venda", json=venda)
 
-r = requests.get(f"{url}/venda")
-pprint(r.json())
+print(f"acesse:\n   {url}/status")

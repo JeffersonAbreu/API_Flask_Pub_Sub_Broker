@@ -1,12 +1,14 @@
 import zmq
 import requests
+IP_HOST = "127.0.0.1"
+URL_API = f"http://{IP_HOST}:8080"
 
 from threading import Thread
 
 class Sub(Thread):
     def __init__(self, id):
         Thread.__init__(self)
-        self.IP_ADDRESS = "127.0.0.1"
+        self.URL = f"tcp://{IP_HOST}:5501"
         self.TOPIC = f"TOPIC_{id}"
         self.ctx = zmq.Context()
         self.sock : zmq.Socket = self.ctx.socket(zmq.SUB)
@@ -15,20 +17,18 @@ class Sub(Thread):
         self.id = id
 
     def run(self):
-        self.sock.connect(f"tcp://{self.IP_ADDRESS}:5501")
+        self.sock.connect(self.URL)
         print(f"TOPICO:  {self.TOPIC} no guardando!")
         self.sock.subscribe(self.TOPIC)
         while self.repetir:
-            msg_string = self.sock.recv_string()
-            msg_json = self.sock.recv_json()
+            msg_string  = self.sock.recv_string()
+            msg_json    = self.sock.recv_json()
             status = msg_json['status']
-            print(f"{msg_json['tipo']} do topico {msg_string}.")
             if(status == 'OK'):
                 self.repetir = False
             else:
                 if(status != self.statusOld):
-                    url = "http://127.0.0.1:8080"
-                    requests.put(f"{url}/venda/{self.id}", json={"status": status})
+                    requests.put(f"{URL_API}/venda/{self.id}", json={"status": status})
                 self.statusOld = status
 
         self.sock.close()

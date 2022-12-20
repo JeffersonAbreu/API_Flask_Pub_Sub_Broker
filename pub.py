@@ -2,6 +2,7 @@ import zmq
 import time
 from threading import Thread
 import logging
+IP_HOST = "127.0.0.1"
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
@@ -11,7 +12,7 @@ class Pub(Thread):
         Thread.__init__(self)
         self.id = id
         self.tipo = tipo
-        self.IP_ADDRESS = "127.0.0.1"
+        self.IP_ADDRESS = IP_HOST
         self.TOPIC = 'pagamento'
         self.ctx = zmq.Context()
         self.sock: zmq.Socket = self.ctx.socket(zmq.PUB)

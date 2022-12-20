@@ -2,7 +2,9 @@ from flask import Flask, jsonify, request
 from model.venda import Venda
 from model.query import Query
 from pub import Pub
-
+IP_HOST = "127.0.0.1"
+PORTA = 8080
+URL_API = f"http://{IP_HOST}:{PORTA}"
 app = Flask(__name__)
 query = Query()
 
@@ -113,13 +115,12 @@ def venda__():
         for venda in vendas:
             v: Venda = venda
             x = {
-                'id'        : v.id,
-                'tipo_pag'  : v.tipo_pag,
-                "status"    : v.status
+                'id': v.id,
+                'tipo_pag': v.tipo_pag,
+                "status": v.status
             }
             lista_vendas.append(x)
         return jsonify(lista_vendas), 200
 
 
-app.run(host="localhost", port=8080)
-# app.run(host="0.0.0.0", port=8080, debug=False)
+app.run(host=IP_HOST, port=PORTA)
